@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cash-MINE - Dashboard</title>
+  <link rel="manifest" href="/manifest.json">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -280,6 +281,17 @@
       <input type="email" id="emailInput" class="email-input" placeholder="your.email@example.com">
       <button class="success-btn" onclick="addEmailReward()">Claim Free Cash</button>
     </div>
+
+    <!-- New Install Button - at the bottom of profile -->
+    <div style="margin-top:32px; text-align:center;">
+      <button onclick="installApp()" style="padding:16px 32px; background:#3b82f6; color:white; border:none; border-radius:12px; font-size:16px; font-weight:600; cursor:pointer; box-shadow:0 4px 12px rgba(59,130,246,0.25);">
+        Install Cash-MINE
+      </button>
+      <p style="font-size:13px; color:#64748b; margin-top:12px;">
+        Add to home screen for faster access
+      </p>
+    </div>
+
   </div>
 </div>
 
@@ -378,6 +390,32 @@ function addEmailReward() {
 
   alert(`Thank you! ₦${reward} free cash added to your balance!\nCheck your new balance.`);
   document.getElementById('emailInput').value = '';
+}
+
+// ────────────────────────────────────────────────
+// NEW: Install App Button Trigger
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  console.log('Install prompt captured - ready for manual trigger');
+});
+
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted install');
+      } else {
+        console.log('User dismissed install');
+      }
+      deferredPrompt = null;
+    });
+  } else {
+    alert("Install option not available yet.\nTry Chrome's 3-dot menu → Install app");
+  }
 }
 </script>
 </body>
