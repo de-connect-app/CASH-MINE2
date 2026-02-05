@@ -1,84 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Cash-MINE Admin</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Cash-MINE Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json">   <!-- ← Added for PWA install -->
+  <style>
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background:#081c3a;
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+      padding:20px;
+    }
 
-<style>
-body{
-  margin:0;
-  font-family: Arial, sans-serif;
-  background:#081c3a;
-  color:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-  padding:20px;
-}
+    .card{
+      background:#fff;
+      color:#000;
+      padding:25px;
+      border-radius:12px;
+      width:90%;
+      max-width:500px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
 
-.card{
-  background:#fff;
-  color:#000;
-  padding:25px;
-  border-radius:12px;
-  width:90%;
-  max-width:500px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
+    input, button{
+      width:100%;
+      padding:12px;
+      margin-top:10px;
+      font-size:16px;
+      border-radius:8px;
+      border:1px solid #ccc;
+    }
 
-input, button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  font-size:16px;
-  border-radius:8px;
-  border:1px solid #ccc;
-}
+    button{
+      background:#1f6fff;
+      color:#fff;
+      border:none;
+      cursor:pointer;
+      font-weight:bold;
+    }
 
-button{
-  background:#1f6fff;
-  color:#fff;
-  border:none;
-  cursor:pointer;
-  font-weight:bold;
-}
+    .admin{
+      display:none;
+    }
 
-.admin{
-  display:none;
-}
+    .user-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      margin: 8px 0;
+    }
 
-.user-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  margin: 8px 0;
-}
+    .user-phone {
+      cursor: pointer;
+      color: #1f6fff;
+      font-weight: bold;
+    }
 
-.user-phone {
-  cursor: pointer;
-  color: #1f6fff;
-  font-weight: bold;
-}
+    .delete-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
 
-.delete-btn {
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.refresh-btn {
-  background: #6c757d;
-  margin-top: 20px;
-}
-</style>
+    .refresh-btn {
+      background: #6c757d;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>

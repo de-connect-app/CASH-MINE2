@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purchase Withdrawal Code</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    .plan {
+      margin: 15px 0;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      background-color: #f0f0f0;
+      transition: 0.3s;
+    }
+
+    .plan:hover {
+      background-color: #e0e0e0;
+    }
+
+    .account-details {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f1f8ff;
+      border: 1px solid #b3d4fc;
+      border-radius: 8px;
+    }
+
+    .account-details p {
+      margin: 6px 0;
+      font-weight: 500;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    input[type="file"] {
+      margin-top: 10px;
+    }
+
+    .message {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #d4edda;
+      color: #155724;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .link {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+    }
+
+    .back-button {
+      background-color: #007bff;
+    }
+
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Purchase Withdrawal Code</h1>
+
+    <!-- Plan Selection -->
+    <div id="planSection">
+      <div class="plan" onclick="selectPlan('Weekly', 7000)">Weekly Plan - ₦7,000</div>
+      <div class="plan" onclick="selectPlan('Monthly', 14000)">Monthly Plan - ₦14,000</div>
+      <div class="plan" onclick="selectPlan('Everlasting', 20000)">Everlasting Plan - ₦20,000</div>
+    </div>
+
+    <!-- Payment & Upload Section -->
+    <div id="paymentSection" style="display:none; text-align:center;">
+      <h2>Transfer Payment: ₦<span id="amount"></span></h2>
+      
+      <div class="account-details">
+        <p><strong>Account Name:</strong> STEPHEN OLUWADARASIMI OBI</p>
+        <p><strong>Bank:</strong> PalmPay Limited (PalmPay)</p>
+        <p><strong>Account Number:</strong> 916 065 2776</p>
+      </div>
+
+      <p>Upload your transaction receipt:</p>
+      <input type="file" id="receiptUpload" accept="image/*">
+      <br>
+      <button onclick="confirmReceipt()">Confirm Code</button>
+      <br>
+      <button class="back-button" onclick="backToPlan()">Choose Another Plan</button>
+    </div>
+
+    <!-- Confirmation Message -->
+    <div class="message" id="confirmationMessage">
+      <p>A 4-digit code has been sent to your registered number.<br>
+      Please check your messages or spam folder for confirmation.</p>
+      <button onclick="returnHome()">Return to Homepage</button>
+      <p>Didn't receive the code? <a class="link" href="https://whatsapp.com/channel/0029Vb5zfLhEKyZQG98VNt2V" target="_blank">Contact Customer Care</a></p>
+      <button class="back-button" onclick="backToPlan()">Choose Another Plan</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedPlan = '';
+    let selectedAmount = 0;
+
+    function selectPlan(plan, amount) {
+      selectedPlan = plan;
+      selectedAmount = amount;
+      document.getElementById('amount').textContent = amount;
+      document.getElementById('planSection').style.display = 'none';
+      document.getElementById('paymentSection').style.display = 'block';
+      document.getElementById('receiptUpload').value = ''; // reset file input
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function confirmReceipt() {
+      const fileInput = document.getElementById('receiptUpload');
+      if (!fileInput.files.length) {
+        alert('Please upload your transaction receipt before confirming.');
+        return;
+      }
+
+      const confirmSubmit = confirm(`Are you sure you want to submit this receipt for the ${selectedPlan} plan? Any mistake or fake transfer will not guarantee a code.`);
+      if (confirmSubmit) {
+        // Simulate sending code
+        document.getElementById('paymentSection').style.display = 'none';
+        document.getElementById('confirmationMessage').style.display = 'block';
+      }
+    }
+
+    function returnHome() {
+      window.location.href = 'index.html';
+    }
+
+    function backToPlan() {
+      document.getElementById('paymentSection').style.display = 'none';
+      document.getElementById('confirmationMessage').style.display = 'none';
+      document.getElementById('planSection').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+  </script>
+</body>
+</html>
