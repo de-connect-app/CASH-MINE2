@@ -17,7 +17,10 @@
     .form-group input { width:100%; padding:16px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:16px; background:#f8fafc; transition:all 0.2s; }
     .form-group input:focus { outline:none; border-color:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,0.15); }
     .form-group label { position:absolute; left:16px; top:50%; transform:translateY(-50%); color:#64748b; pointer-events:none; transition:all 0.25s ease; }
-    .form-group input:focus + label, .form-group input:not(:placeholder-shown) + label { top:-10px; left:12px; font-size:12px; padding:0 6px; background:white; color:#3b82f6; }
+    .form-group input:focus + label,
+    .form-group input:not(:placeholder-shown) + label {
+      top:-10px; left:12px; font-size:12px; padding:0 6px; background:white; color:#3b82f6;
+    }
     button { width:100%; padding:16px; font-size:16px; font-weight:600; border-radius:12px; border:none; cursor:pointer; transition:all 0.2s; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
     .primary-btn { background:#3b82f6; color:white; }
     .success-btn { background:#10b981; color:white; }
@@ -49,7 +52,7 @@
     <button class="primary-btn" onclick="quickWithdraw()">Verify Code</button>
   </div>
 
-  <!-- Step 1: Withdrawal Details -->
+  <!-- Step 1 -->
   <div class="card" id="withdrawSection" style="display:none;">
     <div class="step-indicator">
       <div class="step active">1</div>
@@ -71,7 +74,7 @@
     <button class="primary-btn" onclick="submitWithdraw()">Submit Withdrawal</button>
   </div>
 
-  <!-- Step 2: Upload -->
+  <!-- Step 2 -->
   <div class="card" id="uploadSection" style="display:none;">
     <div class="step-indicator">
       <div class="step">1</div>
@@ -87,7 +90,6 @@
     <button class="primary-btn" onclick="submitReceipt()">Submit for Verification</button>
   </div>
 
-  <!-- Checking -->
   <div class="card" id="checkingSection" style="display:none;">
     <div class="checking">
       <h3 style="color:#3b82f6; margin-bottom:16px;">Verifying Payment...</h3>
@@ -100,87 +102,42 @@
 <script>
   // ───────── Quick Withdraw / Verify Code ─────────
   function quickWithdraw() {
-    const code = document.getElementById('quickCode').value.trim().toUpperCase();
-    if (!code) return alert("Enter your code");
+    const code = document.getElementById('quickCode').value.trim();
+    if (!code) {
+      alert("Enter your withdrawal code.");
+      return;
+    }
 
-    fetch('http://127.0.0.1:3000/verify-code', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        alert("Code verified! Fill in withdrawal details below.");
-        document.getElementById('codeSection').style.display = 'none';
-        document.getElementById('withdrawSection').style.display = 'block';
-      } else {
-        alert("Invalid code. Please check and try again.");
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Server error. Try again later.");
-    });
+    alert(
+      "❌ Wrong withdrawal code.\n\n" +
+      "This code is invalid or not activated.\n\n" +
+      "Please purchase a valid withdrawal code to continue."
+    );
   }
 
-  // ───────── Submit Withdrawal ─────────
+  // ───────── Submit Withdrawal (paused) ─────────
   function submitWithdraw() {
-    const name = document.getElementById('accountName').value.trim();
-    const number = document.getElementById('accountNumber').value.trim();
-    const amount = document.getElementById('withdrawAmount').value.trim();
-    if (!name || !number || !amount) return alert("Please fill all fields");
-
-    fetch('http://127.0.0.1:3000/withdraw', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ accountName: name, accountNumber: number, amount })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        alert(data.message);
-        document.getElementById('withdrawSection').style.display = 'none';
-        document.getElementById('uploadSection').style.display = 'block';
-      } else {
-        alert(data.message || "Failed to submit withdrawal");
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Server error. Try again later.");
-    });
+    alert("Withdrawal service is temporarily unavailable. Please try again later.");
   }
 
   // ───────── Upload Preview ─────────
   document.getElementById('receiptFile').addEventListener('change', function(e) {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(ev) {
-        const preview = document.getElementById('receiptPreview');
-        preview.src = ev.target.result;
-        preview.style.display = 'block';
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const preview = document.getElementById('receiptPreview');
+      preview.src = ev.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
   });
 
-  // ───────── Submit Receipt ─────────
+  // ───────── Submit Receipt (paused) ─────────
   function submitReceipt() {
-    if (!document.getElementById('receiptFile').files.length) {
-      return alert("Please select a receipt image");
-    }
-    document.getElementById('uploadSection').style.display = 'none';
-    document.getElementById('checkingSection').style.display = 'block';
-
-    setTimeout(() => {
-      document.getElementById('checkingMessage').innerText = "Authentication successful! Your code has been sent to the registered phone number.";
-      setTimeout(() => {
-        alert("Your code has been sent. No code without real payment.");
-      }, 1800);
-    }, 4500);
+    alert("Verification is temporarily paused. Please check back later.");
   }
 </script>
+
 </body>
 </html>
