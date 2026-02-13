@@ -4,14 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cash-MINE - Dashboard</title>
-  <link rel="manifest" href="/manifest.json">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: #f5f7fa;
-      color: #1e293b;
+      background: #0d1f4f; /* Dark blue background */
+      color: #ffffff;
       min-height: 100vh;
       padding-bottom: 90px;
     }
@@ -22,50 +21,59 @@
       top: 0;
       left: 0;
       right: 0;
-      background: white;
+      background: #1b2c6b;
       padding: 16px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
       z-index: 1000;
     }
-    .menu-icon { font-size: 28px; cursor: pointer; color: #3b82f6; }
-    .brand-header { font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; }
-    .user-tag { font-size: 14px; color: #64748b; margin-top: 2px; }
+    .menu-icon { font-size: 28px; cursor: pointer; color: #10b981; }
+    .brand-header { font-size: 24px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
+    .user-tag { font-size: 14px; color: #a5b4fc; margin-top: 2px; }
 
     /* Header / Balance */
-    .header { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 80px 24px 40px; text-align: center; border-bottom-left-radius: 32px; border-bottom-right-radius: 32px; margin-top: 60px; }
-    .header h1 { font-size: 42px; font-weight: 700; margin: 8px 0; }
-    .balance-label { font-size: 14px; opacity: 0.85; margin-top: 12px; }
+    .header { background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); color: white; padding: 80px 24px 40px; text-align: center; border-bottom-left-radius: 32px; border-bottom-right-radius: 32px; margin-top: 60px; transition: all 0.3s ease; }
+    .header h1 { font-size: 48px; font-weight: 700; margin: 8px 0; transition: all 0.3s ease; }
+    .balance-label { font-size: 16px; opacity: 0.9; margin-top: 12px; }
 
     .container { padding: 24px; max-width: 480px; margin: 0 auto; }
 
-    .card { background: white; border-radius: 20px; padding: 24px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    .card { background: #ffffff; color: #0f172a; border-radius: 20px; padding: 24px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); transition: transform 0.3s ease; }
+    .card:hover { transform: translateY(-4px); }
 
     .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 32px 0; }
-    .action-btn { padding: 18px; font-size: 16px; font-weight: 600; border-radius: 16px; border: none; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .mine-btn { background: #3b82f6; color: white; box-shadow: 0 6px 16px rgba(59,130,246,0.3); }
-    .withdraw-btn { background: white; border: 2px solid #3b82f6; color: #3b82f6; }
+    .action-btn { padding: 20px; font-size: 18px; font-weight: 700; border-radius: 16px; border: none; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 12px; }
+    .mine-btn { background: #10b981; color: white; box-shadow: 0 6px 16px rgba(16,185,129,0.3); }
+    .withdraw-btn { background: white; border: 2px solid #10b981; color: #10b981; }
 
     /* Purchased Code Section */
     .code-section { margin: 32px 0; text-align: center; }
-    .code-input { width: 100%; padding: 16px; font-size: 18px; text-align: center; border: 2px solid #cbd5e1; border-radius: 12px; margin: 12px 0; }
+    .code-input { width: 100%; padding: 20px; font-size: 20px; text-align: center; border: 2px solid #cbd5e1; border-radius: 12px; margin: 12px 0; }
 
     /* Profile Modal */
     .profile-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; }
-    .profile-card { background: white; border-radius: 20px; width: 90%; max-width: 420px; padding: 32px 24px; position: relative; }
+    .profile-card { background: #ffffff; color: #0f172a; border-radius: 20px; width: 90%; max-width: 420px; padding: 32px 24px; position: relative; }
     .close-btn { position: absolute; top: 16px; right: 20px; font-size: 28px; cursor: pointer; color: #64748b; }
-    .profile-field { margin: 16px 0; font-size: 15px; }
+    .profile-field { margin: 16px 0; font-size: 16px; }
     .profile-field strong { color: #0f172a; }
     .email-form { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
-    .email-input { width: 100%; padding: 14px; border: 1.5px solid #cbd5e1; border-radius: 12px; margin: 12px 0; font-size: 15px; }
+    .email-input { width: 100%; padding: 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; margin: 12px 0; font-size: 16px; }
 
     /* Bottom Nav */
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -4px 16px rgba(0,0,0,0.06); z-index: 1000; }
-    .nav-item { color: #64748b; text-decoration: none; font-size: 13px; font-weight: 500; text-align: center; padding: 6px 12px; border-radius: 12px; }
-    .nav-item.active { color: #3b82f6; background: #eff6ff; font-weight: 600; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1b2c6b; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -4px 16px rgba(0,0,0,0.3); z-index: 1000; }
+    .nav-item { color: #a5b4fc; text-decoration: none; font-size: 14px; font-weight: 500; text-align: center; padding: 6px 12px; border-radius: 12px; }
+    .nav-item.active { color: #10b981; font-weight: 600; }
     .nav-item span { font-size: 20px; display: block; margin-bottom: 4px; }
+
+    /* Progress Bar */
+    .progress-container { width: 100%; height: 14px; background: #e2e8f0; border-radius: 8px; margin-top: 16px; }
+    .progress-bar { height: 100%; width: 0; background: #10b981; border-radius: 8px; transition: width 0.5s ease-in-out; }
+
+    /* Status Colors */
+    .status-qualified { color: #10b981; font-weight: 700; }
+    .status-not { color: #ef4444; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -128,14 +136,12 @@
   <!-- Purchased Code Area -->
   <div class="card code-section">
     <h3 style="margin-bottom:12px;">Already have a code?</h3>
-    <p style="font-size:14px; color:#64748b; margin-bottom:16px;">
-      Enter your purchased code to withdraw your current balance instantly
+    <p style="font-size:16px; color:#64748b; margin-bottom:16px;">
+      Enter your purchased code to withdraw instantly
     </p>
     <input type="text" id="quickCode" class="code-input" placeholder="Enter code here" maxlength="8">
-    <button class="primary-btn" style="margin-top:12px;" onclick="quickWithdraw()">Withdraw Now</button>
-
-    <!-- PURCHASE CODE BUTTON -->
-    <button class="primary-btn" style="margin-top:12px; background:#10b981;" onclick="window.location.href='purchase-code.html'">
+    <button class="mine-btn" style="margin-top:12px; width:100%;" onclick="quickWithdraw()">Withdraw Now</button>
+    <button class="mine-btn" style="margin-top:12px; width:100%; background:#2563eb;" onclick="window.location.href='purchase-code.html'">
       Purchase Withdrawal Code
     </button>
   </div>
@@ -163,34 +169,13 @@
   <div class="profile-card">
     <span class="close-btn" onclick="closeProfile()">×</span>
     <h2 style="text-align:center; margin-bottom:24px;">Profile</h2>
-
     <div class="profile-field"><strong>Name:</strong> <span id="profileName"></span> <span id="profileSurname"></span></div>
     <div class="profile-field"><strong>Username:</strong> @<span id="profileUsername"></span></div>
     <div class="profile-field"><strong>Phone:</strong> <span id="profilePhone"></span></div>
-
-    <div class="email-form">
-      <h3 style="margin-bottom:12px;">Add Email for Free Cash</h3>
-      <p style="font-size:13px; color:#64748b; margin-bottom:12px;">
-        Add your email and get instant cash reward added to your balance!
-      </p>
-      <input type="email" id="emailInput" class="email-input" placeholder="your.email@example.com">
-      <button class="success-btn" onclick="addEmailReward()">Claim Free Cash</button>
-    </div>
-
-    <div style="margin-top:32px; text-align:center;">
-      <button onclick="installApp()" style="padding:16px 32px; background:#3b82f6; color:white; border:none; border-radius:12px; font-size:16px; font-weight:600; cursor:pointer; box-shadow:0 4px 12px rgba(59,130,246,0.25);">
-        Install Cash-MINE
-      </button>
-      <p style="font-size:13px; color:#64748b; margin-top:12px;">
-        Add to home screen for faster access
-      </p>
-    </div>
-
   </div>
 </div>
 
 <script>
-// ────────────────────────────────────────────────
 let points = Number(localStorage.getItem('points')) || 0;
 let plays = Number(localStorage.getItem('plays')) || 0;
 
@@ -223,7 +208,6 @@ function updateUI() {
 }
 updateUI();
 
-// ────────────────────────────────────────────────
 function mine() {
   const btn = document.querySelector('.mine-btn');
   const original = btn.innerHTML;
@@ -241,65 +225,16 @@ function mine() {
   }, 1200);
 }
 
-// ────────────────────────────────────────────────
 function howTo() {
-  alert("How to Qualify & Withdraw:\n\n1. Mine points\n2. Reach 500+ points\n3. Pay ₦7,000 fee to get code\n4. Enter code to withdraw\n\nSupport is 24/7 via channel.");
+  alert("How to Qualify & Withdraw:\n\n1. Mine points\n2. Reach 500+ points\n3. Purchase code\n4. Enter code to withdraw\n\nSupport is 24/7 via channel.");
 }
 
-// ────────────────────────────────────────────────
-// Quick Withdraw with Backend Call
-async function quickWithdraw() {
-  const code = document.getElementById('quickCode').value.trim().toUpperCase();
-  if (!code) return alert("Enter your code");
-
-  try {
-    const res = await fetch('http://127.0.0.1:3000/verify-code', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code })
-    });
-    const data = await res.json();
-    if (data.success) {
-      alert("Code verified! Withdrawal request sent. Check your account shortly.");
-      // Optional: redirect to success page
-      // window.location.href = 'success.html';
-    } else {
-      alert(data.message || "Invalid code. Please try again.");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Error connecting to server. Please try again later.");
-  }
+function quickWithdraw() {
+  alert("❌ Wrong code!\n\nPlease purchase a real code to withdraw your funds.");
 }
 
-// ────────────────────────────────────────────────
-// Profile Modal
 function openProfile() { document.getElementById('profileModal').style.display = 'flex'; }
 function closeProfile() { document.getElementById('profileModal').style.display = 'none'; }
-
-// ────────────────────────────────────────────────
-// Add Email → Fake Reward
-function addEmailReward() {
-  const email = document.getElementById('emailInput').value.trim();
-  if (!email || !email.includes('@')) return alert("Please enter a valid email");
-  const reward = Math.floor(Math.random() * 1500) + 500;
-  points += reward * (100 / 150);
-  localStorage.setItem('points', points);
-  updateUI();
-  alert(`Thank you! ₦${reward} free cash added to your balance!\nCheck your new balance.`);
-  document.getElementById('emailInput').value = '';
-}
-
-// ────────────────────────────────────────────────
-// Install App Button Trigger
-let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
-function installApp() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => { deferredPrompt = null; });
-  } else { alert("Install option not available yet.\nTry Chrome's 3-dot menu → Install app"); }
-}
 </script>
 </body>
 </html>

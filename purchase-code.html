@@ -1,185 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Purchase Withdrawal Code</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash-MINE - Purchase Withdrawal Code</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+body { background:#001f3f; color:#fff; min-height:100vh; padding:24px; display:flex; justify-content:center; align-items:flex-start; }
+.container { max-width:500px; width:100%; }
 
-    .container {
-      max-width: 500px;
-      margin: 50px auto;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-    }
+h1, h2, h3 { text-align:center; margin-bottom:24px; }
+h1 { font-size:28px; font-weight:700; }
+h2 { font-size:24px; font-weight:600; }
 
-    h1, h2 {
-      text-align: center;
-      color: #333;
-    }
+/* Plan Cards */
+.plan-card { background:#0f1733; margin:12px 0; border-radius:20px; padding:24px; font-size:18px; font-weight:600; cursor:pointer; transition: all 0.4s ease; text-align:center; box-shadow:0 6px 16px rgba(0,0,0,0.3); }
+.plan-card:hover { transform:translateY(-6px) scale(1.02); box-shadow:0 10px 24px rgba(0,0,0,0.5); }
+.plan-card span { display:block; margin-top:12px; font-size:22px; font-weight:700; }
 
-    .plan {
-      margin: 15px 0;
-      padding: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      text-align: center;
-      cursor: pointer;
-      background-color: #f0f0f0;
-      transition: 0.3s;
-    }
+/* Sections */
+.section { display:none; background:#0f1733; border-radius:20px; padding:24px; margin-top:24px; opacity:0; transform:translateY(20px); transition: all 0.6s ease; }
+.active { display:block; opacity:1; transform:translateY(0); }
 
-    .plan:hover {
-      background-color: #e0e0e0;
-    }
+/* Account Details */
+.account-details { background:#07102b; border:1px solid #3b82f6; border-radius:12px; padding:16px; margin:20px 0; transition: all 0.5s ease; }
+.account-details p { margin:8px 0; font-size:18px; }
+.copy-btn { background:#3b82f6; color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:14px; margin-left:8px; }
 
-    .account-details {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #f1f8ff;
-      border: 1px solid #b3d4fc;
-      border-radius: 8px;
-    }
+/* Input & Buttons */
+input[type="file"], input[type="text"] { width:100%; padding:16px; margin:12px 0; border-radius:12px; border:2px solid #3b82f6; background:#07102b; color:#fff; font-size:16px; }
+button { width:100%; padding:16px; border:none; border-radius:12px; font-size:18px; font-weight:600; cursor:pointer; margin-top:12px; transition: all 0.3s ease; }
+button:hover { transform:scale(1.03); }
+.primary-btn { background:#3b82f6; color:white; }
+.secondary-btn { background:#10b981; color:white; }
+.back-btn { background:#ff4136; color:white; }
 
-    .account-details p {
-      margin: 6px 0;
-      font-weight: 500;
-    }
+/* Modal */
+.modal { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); display:none; justify-content:center; align-items:center; z-index:2000; }
+.modal-content { background:#0f1733; padding:32px; border-radius:20px; text-align:center; width:90%; max-width:400px; transform:scale(0.8); opacity:0; transition: all 0.5s ease; }
+.modal.show .modal-content { transform:scale(1); opacity:1; animation:pulse 1.5s infinite; }
+.modal-content p { font-size:18px; margin-bottom:16px; }
 
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+/* Terms */
+.terms { background:#07102b; border:1px solid #3b82f6; border-radius:12px; padding:16px; font-size:14px; line-height:1.5; margin:20px 0; }
+.terms h4 { margin-bottom:8px; font-size:16px; color:#3b82f6; }
 
-    button:hover {
-      background-color: #45a049;
-    }
+/* Receipt Preview */
+#receiptPreview { width:100%; margin-top:16px; border-radius:12px; display:none; }
 
-    input[type="file"] {
-      margin-top: 10px;
-    }
-
-    .message {
-      margin-top: 15px;
-      padding: 10px;
-      background-color: #d4edda;
-      color: #155724;
-      border-radius: 5px;
-      display: none;
-    }
-
-    .link {
-      color: #007bff;
-      text-decoration: none;
-    }
-
-    .link:hover {
-      text-decoration: underline;
-    }
-
-    .back-button {
-      background-color: #007bff;
-    }
-
-    .back-button:hover {
-      background-color: #0056b3;
-    }
-
-  </style>
+/* Animations */
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.6;} }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Purchase Withdrawal Code</h1>
 
-    <!-- Plan Selection -->
-    <div id="planSection">
-      <div class="plan" onclick="selectPlan('Weekly', 7000)">Weekly Plan - ₦7,000</div>
-      <div class="plan" onclick="selectPlan('Monthly', 14000)">Monthly Plan - ₦14,000</div>
-      <div class="plan" onclick="selectPlan('Everlasting', 20000)">Everlasting Plan - ₦20,000</div>
-    </div>
+<div class="container">
+<h1>Purchase Withdrawal Code</h1>
 
-    <!-- Payment & Upload Section -->
-    <div id="paymentSection" style="display:none; text-align:center;">
-      <h2>Transfer Payment: ₦<span id="amount"></span></h2>
-      
-      <div class="account-details">
-        <p><strong>Account Name:</strong> STEPHEN OLUWADARASIMI OBI</p>
-        <p><strong>Bank:</strong> PalmPay Limited (PalmPay)</p>
-        <p><strong>Account Number:</strong> 916 065 2776</p>
-      </div>
+<!-- Step 1: Select Plan -->
+<div id="planSection" class="section active">
+  <div class="plan-card" onclick="selectPlan('Daily',3000,'#007bff')">Daily <span>₦3,000</span></div>
+  <div class="plan-card" onclick="selectPlan('Weekly',7000,'#10b981')">Weekly <span>₦7,000</span></div>
+  <div class="plan-card" onclick="selectPlan('Monthly',14000,'#ff851b')">Monthly <span>₦14,000</span></div>
+  <div class="plan-card" onclick="selectPlan('Annually',20000,'#b10dc9')">Annually <span>₦20,000</span></div>
+  <div class="plan-card" onclick="selectPlan('Premium',30000,'#ff4136')">Premium <span>₦30,000</span></div>
+  <div class="plan-card" onclick="selectPlan('Gold',40000,'#2ecc40')">Gold <span>₦40,000</span></div>
+</div>
 
-      <p>Upload your transaction receipt:</p>
-      <input type="file" id="receiptUpload" accept="image/*">
-      <br>
-      <button onclick="confirmReceipt()">Confirm Code</button>
-      <br>
-      <button class="back-button" onclick="backToPlan()">Choose Another Plan</button>
-    </div>
-
-    <!-- Confirmation Message -->
-    <div class="message" id="confirmationMessage">
-      <p>A 4-digit code has been sent to your registered number.<br>
-      Please check your messages or spam folder for confirmation.</p>
-      <button onclick="returnHome()">Return to Homepage</button>
-      <p>Didn't receive the code? <a class="link" href="https://whatsapp.com/channel/0029Vb5zfLhEKyZQG98VNt2V" target="_blank">Contact Customer Care</a></p>
-      <button class="back-button" onclick="backToPlan()">Choose Another Plan</button>
-    </div>
+<!-- Step 2: Account Details -->
+<div id="accountSection" class="section">
+  <h2>Account Details</h2>
+  <div class="account-details">
+    <p>Account Name: <span id="accName">STEPHEN OLUWADARASIMI OBI</span> <button class="copy-btn" onclick="copyText('accName')">Copy</button></p>
+    <p>Bank: <span id="bankName">PalmPay Limited (PalmPay)</span> <button class="copy-btn" onclick="copyText('bankName')">Copy</button></p>
+    <p>Account Number: <span id="accNumber">9160652776</span> <button class="copy-btn" onclick="copyText('accNumber')">Copy</button></p>
   </div>
+  <button class="primary-btn" onclick="moveToReceipt()">Next → Receipt Upload</button>
+  <button class="back-btn" onclick="backToPlan()">Choose Another Plan</button>
+</div>
 
-  <script>
-    let selectedPlan = '';
-    let selectedAmount = 0;
+<!-- Step 3: Receipt Upload -->
+<div id="paymentSection" class="section">
+  <h2>Upload Receipt</h2>
+  <div class="terms">
+    <h4>Warning</h4>
+    <ul>
+      <li>Ensure correct transfer amount.</li>
+      <li>Fake or incorrect transfers will be denied.</li>
+    </ul>
+  </div>
+  <input type="file" id="receiptUpload" accept="image/*">
+  <img id="receiptPreview" alt="Receipt Preview">
+  <button class="primary-btn" onclick="confirmReceipt()">Confirm Payment</button>
+  <button class="back-btn" onclick="backToAccount()">Back</button>
+</div>
 
-    function selectPlan(plan, amount) {
-      selectedPlan = plan;
-      selectedAmount = amount;
-      document.getElementById('amount').textContent = amount;
-      document.getElementById('planSection').style.display = 'none';
-      document.getElementById('paymentSection').style.display = 'block';
-      document.getElementById('receiptUpload').value = ''; // reset file input
-      window.scrollTo(0, document.body.scrollHeight);
-    }
+</div>
 
-    function confirmReceipt() {
-      const fileInput = document.getElementById('receiptUpload');
-      if (!fileInput.files.length) {
-        alert('Please upload your transaction receipt before confirming.');
-        return;
-      }
+<!-- Confirmation Modal -->
+<div class="modal" id="confirmationModal">
+  <div class="modal-content">
+    <p>A 4-digit code has been sent to your registered number.<br>
+       If you don't receive it, please purchase a new code or contact support.</p>
+    <button class="secondary-btn" onclick="closeModal()">OK</button>
+  </div>
+</div>
 
-      const confirmSubmit = confirm(`Are you sure you want to submit this receipt for the ${selectedPlan} plan? Any mistake or fake transfer will not guarantee a code.`);
-      if (confirmSubmit) {
-        // Simulate sending code
-        document.getElementById('paymentSection').style.display = 'none';
-        document.getElementById('confirmationMessage').style.display = 'block';
-      }
-    }
+<script>
+let selectedPlan = '';
+let selectedAmount = 0;
 
-    function returnHome() {
-      window.location.href = 'index.html';
-    }
+function selectPlan(plan, amount,color){
+  selectedPlan = plan;
+  selectedAmount = amount;
+  document.getElementById('planSection').classList.remove('active');
+  document.getElementById('accountSection').classList.add('active');
+}
 
-    function backToPlan() {
-      document.getElementById('paymentSection').style.display = 'none';
-      document.getElementById('confirmationMessage').style.display = 'none';
-      document.getElementById('planSection').style.display = 'block';
-      window.scrollTo(0, 0);
-    }
-  </script>
+function backToPlan(){
+  document.getElementById('accountSection').classList.remove('active');
+  document.getElementById('planSection').classList.add('active');
+}
+
+function moveToReceipt(){
+  document.getElementById('accountSection').classList.remove('active');
+  document.getElementById('paymentSection').classList.add('active');
+}
+
+function backToAccount(){
+  document.getElementById('paymentSection').classList.remove('active');
+  document.getElementById('accountSection').classList.add('active');
+}
+
+// Receipt preview
+document.getElementById('receiptUpload').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const preview = document.getElementById('receiptPreview');
+    preview.src = ev.target.result;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+});
+
+// Confirm Payment
+function confirmReceipt(){
+  const fileInput = document.getElementById('receiptUpload');
+  if(!fileInput.files.length){
+    alert('Please upload your transaction receipt before confirming.');
+    return;
+  }
+  // Show modal confirmation
+  const modal = document.getElementById('confirmationModal');
+  modal.style.display = 'flex';
+  modal.classList.add('show');
+}
+
+// Close modal
+function closeModal(){
+  const modal = document.getElementById('confirmationModal');
+  modal.style.display = 'none';
+  modal.classList.remove('show');
+  // Reset to plan selection
+  backToPlan();
+}
+
+// Copy function
+function copyText(id){
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(()=> alert('Copied: ' + text));
+}
+</script>
 </body>
 </html>

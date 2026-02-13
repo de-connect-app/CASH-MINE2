@@ -1,142 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cash-MINE - Withdraw</title>
-  <link rel="manifest" href="/manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Inter',system-ui,sans-serif; background:#f5f7fa; color:#1e293b; min-height:100vh; padding:24px 16px; }
-    .container { max-width:480px; margin:0 auto; }
-    h2 { text-align:center; font-size:26px; font-weight:700; color:#0f172a; margin-bottom:32px; }
-    .card { background:white; border-radius:20px; padding:24px; margin-bottom:24px; box-shadow:0 8px 24px rgba(0,0,0,0.08); transition: transform 0.2s; }
-    .card.active { transform: translateY(-4px); }
-    .form-group { position: relative; margin-bottom:28px; }
-    .form-group input { width:100%; padding:16px; border:1.5px solid #cbd5e1; border-radius:12px; font-size:16px; background:#f8fafc; transition:all 0.2s; }
-    .form-group input:focus { outline:none; border-color:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,0.15); }
-    .form-group label { position:absolute; left:16px; top:50%; transform:translateY(-50%); color:#64748b; pointer-events:none; transition:all 0.25s ease; }
-    .form-group input:focus + label,
-    .form-group input:not(:placeholder-shown) + label {
-      top:-10px; left:12px; font-size:12px; padding:0 6px; background:white; color:#3b82f6;
-    }
-    button { width:100%; padding:16px; font-size:16px; font-weight:600; border-radius:12px; border:none; cursor:pointer; transition:all 0.2s; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-    .primary-btn { background:#3b82f6; color:white; }
-    .success-btn { background:#10b981; color:white; }
-    .warning-btn { background:#ef4444; color:white; }
-    .upload-area { border:2px dashed #cbd5e1; border-radius:16px; padding:32px 16px; text-align:center; margin:20px 0; cursor:pointer; transition:all 0.2s; }
-    .upload-area:hover { border-color:#3b82f6; background:#eff6ff; }
-    #receiptPreview { max-width:100%; margin-top:16px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); display:none; }
-    .warning-box { background:#fee2e2; color:#991b1b; padding:16px; border-radius:12px; margin:20px 0; font-size:14px; line-height:1.5; border-left:4px solid #ef4444; }
-    .step-indicator { display:flex; justify-content:space-between; margin-bottom:24px; }
-    .step { width:40px; height:40px; background:#e2e8f0; color:#64748b; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:600; font-size:16px; }
-    .step.active { background:#3b82f6; color:white; }
-    .checking { text-align:center; padding:40px 20px; animation:pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.6;} }
-    .code-input { width:100%; padding:16px; font-size:18px; text-align:center; border:2px solid #cbd5e1; border-radius:12px; margin:12px 0; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash-MINE - Withdraw</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'Inter', sans-serif;
+  background:#0d1f4f;
+  color:white;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.container {
+  width:100%;
+  max-width:450px;
+}
+
+.card {
+  background:white;
+  color:#0f172a;
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.25);
+  transition: all 0.4s ease;
+}
+
+h2 {
+  text-align:center;
+  margin-bottom:20px;
+  font-weight:700;
+}
+
+.form-group {
+  margin-bottom:20px;
+}
+
+input {
+  width:100%;
+  padding:16px;
+  font-size:17px;
+  border-radius:12px;
+  border:1.5px solid #cbd5e1;
+  outline:none;
+  transition:0.3s;
+}
+
+input:focus {
+  border-color:#3b82f6;
+  box-shadow:0 0 0 3px rgba(59,130,246,0.15);
+}
+
+button {
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  font-size:17px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.primary-btn {
+  background:#10b981;
+  color:white;
+}
+
+.secondary-btn {
+  background:#2563eb;
+  color:white;
+  margin-top:12px;
+}
+
+.hidden {
+  display:none;
+}
+
+.message {
+  text-align:center;
+  margin-top:16px;
+  font-weight:600;
+  color:#ef4444;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(10px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.loader {
+  text-align:center;
+  padding:20px;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%{opacity:1;}
+  50%{opacity:0.4;}
+  100%{opacity:1;}
+}
+</style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Withdraw Funds</h2>
 
-  <!-- Step 0: Enter Code -->
-  <div class="card" id="codeSection">
-    <h3 style="margin-bottom:12px;">Enter Your Withdrawal Code</h3>
-    <p style="font-size:14px; color:#64748b; margin-bottom:16px;">
-      Enter the 4-digit code you purchased to unlock withdrawal
-    </p>
-    <input type="text" id="quickCode" class="code-input" placeholder="e.g. 4952 or T329" maxlength="4">
-    <button class="primary-btn" onclick="quickWithdraw()">Verify Code</button>
-  </div>
+<!-- Step 1: Account Details -->
+<div class="card" id="accountCard">
+<h2>Enter Account Details</h2>
 
-  <!-- Step 1 -->
-  <div class="card" id="withdrawSection" style="display:none;">
-    <div class="step-indicator">
-      <div class="step active">1</div>
-      <div class="step">2</div>
-      <div class="step">3</div>
-    </div>
-    <div class="form-group">
-      <input type="text" id="accountName" placeholder=" " required>
-      <label>Account Name</label>
-    </div>
-    <div class="form-group">
-      <input type="text" id="accountNumber" placeholder=" " required>
-      <label>Account Number</label>
-    </div>
-    <div class="form-group">
-      <input type="number" id="withdrawAmount" placeholder=" " required>
-      <label>Amount to Withdraw</label>
-    </div>
-    <button class="primary-btn" onclick="submitWithdraw()">Submit Withdrawal</button>
-  </div>
+<div class="form-group">
+<input type="text" id="accName" placeholder="Account Name">
+</div>
 
-  <!-- Step 2 -->
-  <div class="card" id="uploadSection" style="display:none;">
-    <div class="step-indicator">
-      <div class="step">1</div>
-      <div class="step active">2</div>
-      <div class="step">3</div>
-    </div>
-    <h3 style="text-align:center; margin-bottom:16px;">Upload Payment Proof</h3>
-    <div class="upload-area" onclick="document.getElementById('receiptFile').click()">
-      <p style="font-weight:500; color:#64748b;">Tap to select receipt from gallery</p>
-      <input type="file" id="receiptFile" accept="image/*" style="display:none;">
-    </div>
-    <img id="receiptPreview" alt="Receipt Preview">
-    <button class="primary-btn" onclick="submitReceipt()">Submit for Verification</button>
-  </div>
+<div class="form-group">
+<input type="text" id="accNumber" placeholder="Account Number">
+</div>
 
-  <div class="card" id="checkingSection" style="display:none;">
-    <div class="checking">
-      <h3 style="color:#3b82f6; margin-bottom:16px;">Verifying Payment...</h3>
-      <p id="checkingMessage" style="font-size:16px;">Please wait a moment</p>
-    </div>
-  </div>
+<div class="form-group">
+<input type="text" id="bankName" placeholder="Bank Name">
+</div>
+
+<button class="primary-btn" onclick="goToCode()">Submit & Withdraw</button>
+</div>
+
+<!-- Step 2: Code Verification -->
+<div class="card hidden" id="codeCard">
+<h2>Enter Withdrawal Code</h2>
+
+<div class="form-group">
+<input type="text" id="withdrawCode" placeholder="Enter 4-digit code">
+</div>
+
+<button class="primary-btn" onclick="verifyCode()">Verify Code</button>
+
+<div id="loading" class="loader hidden">Checking code...</div>
+
+<div id="errorMsg" class="message hidden">
+❌ Wrong code. Please purchase a valid withdrawal code.
+</div>
+
+<button class="secondary-btn" onclick="goToPurchase()">Purchase Code</button>
+</div>
 
 </div>
 
 <script>
-  // ───────── Quick Withdraw / Verify Code ─────────
-  function quickWithdraw() {
-    const code = document.getElementById('quickCode').value.trim();
-    if (!code) {
-      alert("Enter your withdrawal code.");
-      return;
-    }
+function goToCode(){
+  const name = document.getElementById('accName').value.trim();
+  const number = document.getElementById('accNumber').value.trim();
+  const bank = document.getElementById('bankName').value.trim();
 
-    alert(
-      "❌ Wrong withdrawal code.\n\n" +
-      "This code is invalid or not activated.\n\n" +
-      "Please purchase a valid withdrawal code to continue."
-    );
+  if(!name || !number || !bank){
+    alert("Please fill all account details.");
+    return;
   }
 
-  // ───────── Submit Withdrawal (paused) ─────────
-  function submitWithdraw() {
-    alert("Withdrawal service is temporarily unavailable. Please try again later.");
+  document.getElementById('accountCard').classList.add('hidden');
+  document.getElementById('codeCard').classList.remove('hidden');
+}
+
+function verifyCode(){
+  const code = document.getElementById('withdrawCode').value.trim();
+  if(!code){
+    alert("Enter your withdrawal code.");
+    return;
   }
 
-  // ───────── Upload Preview ─────────
-  document.getElementById('receiptFile').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      const preview = document.getElementById('receiptPreview');
-      preview.src = ev.target.result;
-      preview.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-  });
+  document.getElementById('loading').classList.remove('hidden');
+  document.getElementById('errorMsg').classList.add('hidden');
 
-  // ───────── Submit Receipt (paused) ─────────
-  function submitReceipt() {
-    alert("Verification is temporarily paused. Please check back later.");
-  }
+  setTimeout(()=>{
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('errorMsg').classList.remove('hidden');
+  },1500);
+}
+
+function goToPurchase(){
+  window.location.href = "purchase-code.html";
+}
 </script>
 
 </body>
